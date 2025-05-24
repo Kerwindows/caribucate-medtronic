@@ -2,7 +2,6 @@ export interface AuthModel {
   api_token: string
   refreshToken?: string
 }
-
 export interface UserAddressModel {
   addressLine: string
   city: string
@@ -43,25 +42,32 @@ export interface UserSocialNetworksModel {
   instagram: string
 }
 
+// src/app/modules/auth/_models.ts
 export interface UserModel {
   id: number
-  username: string
-  password: string | undefined
+  role: string
+  avatar: string
+  firstName: string
+  lastName: string
+  fullName: string
   email: string
-  first_name: string
-  last_name: string
-  fullname?: string
-  occupation?: string
-  companyName?: string
-  phone?: string
-  roles?: Array<number>
-  pic?: string
-  language?: 'en' | 'de' | 'es' | 'fr' | 'ja' | 'zh' | 'ru'
+  phone: string
+  username?: string
+  dob?: string
+  address1?: string
+  address2?: string
+  city?: string
+  country?: string
   timeZone?: string
-  website?: 'https://keenthemes.com'
-  emailSettings?: UserEmailSettingsModel
-  auth?: AuthModel
-  communication?: UserCommunicationModel
-  address?: UserAddressModel
-  socialNetworks?: UserSocialNetworksModel
+  onSite?: boolean
+  createdAt: string
+  updatedAt: string
+  position?: string
+  positionId?: number
+  departments: string[]
+  departmentIds: number[]
+  formClass?: string
+  startYear?: number
+  endYear?: number
+  studentStatus?: string
 }
