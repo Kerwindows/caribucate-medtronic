@@ -1,7 +1,9 @@
 import {KTIcon, toAbsoluteUrl} from '../../../helpers'
 import {HeaderNotificationsMenu, HeaderUserMenu, QuickLinks} from '../../../partials'
+import { useAuth } from "../../../../app/modules/auth";
 
 const AsideFooter = () => {
+    const { currentUser } = useAuth();
   return (
     <div
       className='aside-footer d-flex flex-column align-items-center flex-column-auto'
@@ -77,7 +79,10 @@ const AsideFooter = () => {
           data-kt-menu-placement='top-start'
           title='User profile'
         >
-          <img src={toAbsoluteUrl('media/avatars/300-1.jpg')} alt='avatar' />
+          <img 
+                          src={currentUser?.avatar ? toAbsoluteUrl(currentUser.avatar) : toAbsoluteUrl('/media/avatars/300-1.jpg')} 
+                          alt={currentUser?.fullName || 'User'} 
+                        />
         </div>
         {/* end::Menu wrapper */}
         <HeaderUserMenu />

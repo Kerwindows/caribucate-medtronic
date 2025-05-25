@@ -63,9 +63,12 @@ export interface UserModel {
   createdAt: string
   updatedAt: string
   position?: string
+  house?: string
   positionId?: number
   departments: string[]
   departmentIds: number[]
+  schools: string[]
+  schoolIds: number[]
   formClass?: string
   startYear?: number
   endYear?: number

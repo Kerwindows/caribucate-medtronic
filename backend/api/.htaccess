@@ -2,7 +2,7 @@
 
 <IfModule mod_rewrite.c>
   RewriteEngine On
-  RewriteBase /caribucate-metronic-7/backend/api/
+  RewriteBase /caribucate-metronic-1/backend/api/
 
   # map /login → login.php, etc.
   RewriteRule ^login/?$        login.php        [L,QSA]

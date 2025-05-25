@@ -1,22 +1,21 @@
 <?php
-// Debug helpers — show all errors in the response
+// 1) Autoload Composer packages and load .env
+require_once __DIR__ . '/../vendor/autoload.php';
+
+// 2) Pull in your classes
+use Firebase\JWT\JWT;
+use Backend\Config\Database;
+
+// 3) Debug helpers — show all errors in the response
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// 1) Autoload Composer packages and load .env
-require_once __DIR__ . '/../vendor/autoload.php';
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
-$dotenv->safeLoad();
-
-// 2) Emit CORS headers (and exit on OPTIONS)
+// 4) Emit CORS headers (and exit on OPTIONS)
 require_once __DIR__ . '/cors.php';
 
-// 3) Ensure JSON response
+// 5) Ensure JSON response
 header('Content-Type: application/json');
-
-use Firebase\JWT\JWT;
-use Backend\Config\Database;
 
 // 4) Read request body
 $data = json_decode(file_get_contents('php://input'), true);
