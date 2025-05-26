@@ -2,10 +2,16 @@
 import React from 'react'
 import {Card2} from '../../../../_metronic/partials/content/cards/Card2'
 import {IconUserModel} from '../ProfileModels'
+import {UsersTable} from '../../../../_metronic/partials/widgets/tables/UsersTable';
 
 export function Projects() {
   return (
     <>
+    <div className='content d-flex flex-column flex-column-fluid' >
+      <div className='container-xxl'>
+        <UsersTable />
+      </div>
+    </div>
       <div className='d-flex flex-wrap flex-stack mb-6'>
         <h3 className='fw-bolder my-2'>
           My Projects

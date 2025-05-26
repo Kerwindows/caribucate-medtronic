@@ -2,6 +2,7 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
 import {KTIcon} from '../../../../_metronic/helpers'
+import {useAuth} from '../../auth'
 import {
   ChartsWidget1,
   ListsWidget5,
@@ -10,6 +11,7 @@ import {
 } from '../../../../_metronic/partials/widgets'
 
 export function Overview() {
+  const {currentUser} = useAuth()
   return (
     <>
       <div className='card mb-5 mb-xl-10' id='kt_profile_details_view'>
@@ -28,12 +30,12 @@ export function Overview() {
             <label className='col-lg-4 fw-bold text-muted'>Full Name</label>
 
             <div className='col-lg-8'>
-              <span className='fw-bolder fs-6 text-gray-900'>Max Smith</span>
+              <span className='fw-bolder fs-6 text-gray-900'>{currentUser?.fullName}</span>
             </div>
           </div>
 
           <div className='row mb-7'>
-            <label className='col-lg-4 fw-bold text-muted'>Company</label>
+            <label className='col-lg-4 fw-bold text-muted'>School</label>
 
             <div className='col-lg-8 fv-row'>
               <span className='fw-bold fs-6'>Keenthemes</span>
@@ -51,21 +53,49 @@ export function Overview() {
             </label>
 
             <div className='col-lg-8 d-flex align-items-center'>
-              <span className='fw-bolder fs-6 me-2'>044 3276 454 935</span>
+              <span className='fw-bolder fs-6 me-2'>{currentUser?.phone || 'Not provided'}</span>
 
               <span className='badge badge-success'>Verified</span>
             </div>
           </div>
 
-          <div className='row mb-7'>
-            <label className='col-lg-4 fw-bold text-muted'>Company Site</label>
-
-            <div className='col-lg-8'>
-              <a href='#' className='fw-bold fs-6 text-gray-900 text-hover-primary'>
-                keenthemes.com
-              </a>
-            </div>
-          </div>
+          {['teacher', 'admin'].includes(currentUser?.role) && (
+                  <div className='row mb-7'>
+                    <label className='col-lg-4 fw-bold text-muted'>Professional Information</label>
+                    <div className='col-lg-8'>
+                      {currentUser?.position && (
+                        <div className='d-flex align-items-center mb-2'>
+                          <span className='fw-bolder fs-6 me-3'>Position:</span>
+                          <span>{currentUser.position}</span>
+                        </div>
+                      )}
+                      {currentUser.departments.length > 0 && (
+                        <div className='d-flex align-items-center mb-2'>
+                          <span className='fw-bolder fs-6 me-3'>Departments:</span>
+                          <span>{currentUser.departments.join(', ')}</span>
+                        </div>
+                      )}
+                      {currentUser.schools.length > 0 && (
+                        <div className='d-flex align-items-center mb-2'>
+                          <span className='fw-bolder fs-6 me-3'>School(s):</span>
+                          <span>{currentUser.schools.join(', ')}</span>
+                        </div>
+                      )}
+                      {currentUser?.formClass && (
+                        <div className='d-flex align-items-center'>
+                          <span className='fw-bolder fs-6 me-3'>Form Class:</span>
+                          <span>{currentUser.formClass}</span>
+                        </div>
+                      )}
+                      {currentUser?.house && (
+                        <div className='d-flex align-items-center'>
+                          <span className='fw-bolder fs-6 me-3'>House:</span>
+                          <span>{currentUser.house}</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
 
           <div className='row mb-7'>
             <label className='col-lg-4 fw-bold text-muted'>
@@ -78,7 +108,7 @@ export function Overview() {
             </label>
 
             <div className='col-lg-8'>
-              <span className='fw-bolder fs-6 text-gray-900'>Germany</span>
+              <span className='fw-bolder fs-6 text-gray-900'>{currentUser?.country}</span>
             </div>
           </div>
 

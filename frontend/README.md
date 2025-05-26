@@ -28,6 +28,10 @@ If you are developing a production application, we recommend updating the config
 
 
 
+-frontend
 Modify directory home for 
 backend\api\.htaccess
 frontend\.env
+
+-backend
+composer dump-autoload

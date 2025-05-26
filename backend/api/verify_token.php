@@ -46,59 +46,81 @@ try {
     // In your verify_token.php or profile.php
     $stmt = $pdo->prepare("
     SELECT 
-        u.id,
-        u.role,
-        u.avatar,
-        u.first_name,
-        u.last_name,
-        CONCAT(u.first_name, ' ', u.last_name) AS full_name,
-        u.email,
-        u.phone,
-        u.username,
-        u.dob,
-        u.address1,
-        u.address2,
-        u.city,
-        u.country,
-        u.time_zone,
-        u.on_site,
-        u.created_at,
-        u.updated_at,
-        p.name AS position,
-        p.id AS position_id,
-        (SELECT GROUP_CONCAT(d.name SEPARATOR ', ') 
-         FROM user_departments ud 
-         JOIN departments d ON ud.department_id = d.id 
-         WHERE ud.user_id = u.id) AS departments,
-        (SELECT GROUP_CONCAT(d.id) 
-         FROM user_departments ud 
-         JOIN departments d ON ud.department_id = d.id 
-         WHERE ud.user_id = u.id) AS department_ids,
-        CASE 
-            WHEN u.role = 'teacher' THEN t.form_class
-            WHEN u.role = 'student' THEN s.form_class
-            ELSE NULL
-        END AS form_class,
-        s.start_year,
-        s.end_year,
-        s.status AS student_status
-    FROM 
-        users u
-    LEFT JOIN positions p ON u.position_id = p.id
-    LEFT JOIN teachers t ON u.id = t.user_id
-    LEFT JOIN students s ON u.id = s.user_id
-    WHERE u.id = ?
+    u.id,
+    u.role,
+    u.avatar,
+    u.first_name,
+    u.last_name,
+    CONCAT(u.first_name, ' ', u.last_name) AS full_name,
+    u.email,
+    u.phone,
+    u.username,
+    u.dob,
+    u.address1,
+    u.address2,
+    u.city,
+    u.country,
+    u.time_zone,
+    u.on_site,
+    u.created_at,
+    u.updated_at,
+    u.house,
+    p.name AS position,
+    p.id AS position_id,
+    (SELECT GROUP_CONCAT(d.name SEPARATOR ', ') 
+     FROM user_departments ud 
+     JOIN departments d ON ud.department_id = d.id 
+     WHERE ud.user_id = u.id) AS departments,
+    (SELECT GROUP_CONCAT(d.id) 
+     FROM user_departments ud 
+     JOIN departments d ON ud.department_id = d.id 
+     WHERE ud.user_id = u.id) AS department_ids,
+    -- New school fields following the same pattern as departments
+    (SELECT GROUP_CONCAT(s.name SEPARATOR ', ') 
+     FROM user_schools us 
+     JOIN schools s ON us.school_id = s.id 
+     WHERE us.user_id = u.id) AS schools,
+    (SELECT GROUP_CONCAT(s.id) 
+     FROM user_schools us 
+     JOIN schools s ON us.school_id = s.id 
+     WHERE us.user_id = u.id) AS school_ids,
+    CASE 
+        WHEN u.role = 'teacher' THEN t.form_class
+        WHEN u.role = 'student' THEN s.form_class
+        ELSE NULL
+    END AS form_class,
+    s.start_year,
+    s.end_year,
+    s.status AS student_status
+FROM 
+    users u
+LEFT JOIN positions p ON u.position_id = p.id
+LEFT JOIN teachers t ON u.id = t.user_id
+LEFT JOIN students s ON u.id = s.user_id
+WHERE u.id = ?
 ");
     $stmt->execute([$decoded->sub]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
+    // Add this debug line:
+error_log("Raw DB result: " . print_r($user, true));
+
     // Convert comma-separated departments to array
-    if ($user['departments']) {
+    if (!empty($user['departments'])) {
         $user['departments'] = explode(', ', $user['departments']);
-        $user['department_ids'] = explode(',', $user['department_ids']);
+        $user['department_ids'] = array_map('intval', explode(',', $user['department_ids']));
     } else {
         $user['departments'] = [];
         $user['department_ids'] = [];
+    }
+
+    // Convert comma-separated schools to array
+    if (!empty($user['schools'])) {
+        $user['schools'] = explode(', ', $user['schools']);
+        $user['school_ids'] = array_map('intval', explode(',', $user['school_ids']));
+    } else {
+        $user['schools'] = [];
+        $user['school_ids'] = [];
     }
 
     if (!$user) {
@@ -106,38 +128,40 @@ try {
     }
 
     // 7) Successful response with all user data
-    // 7) Successful response with all user data
-echo json_encode([
-    'status' => 'success',
-    'user' => [
-        'id' => $user['id'],
-        'role' => $user['role'],
-        'avatar' => $user['avatar'] ?? '/media/avatars/blank.png',
-        'firstName' => $user['first_name'],
-        'lastName' => $user['last_name'],
-        'fullName' => $user['full_name'],
-        'email' => $user['email'],
-        'phone' => $user['phone'] ?? null,
-        'username' => $user['username'] ?? null,
-        'dob' => $user['dob'] ?? null,
-        'address1' => $user['address1'] ?? null,
-        'address2' => $user['address2'] ?? null,
-        'city' => $user['city'] ?? null,
-        'country' => $user['country'] ?? null,
-        'timeZone' => $user['time_zone'] ?? null,
-        'onSite' => (bool)$user['on_site'],
-        'createdAt' => $user['created_at'],
-        'updatedAt' => $user['updated_at'],
-        'position' => $user['position'] ?? null,
-        'positionId' => $user['position_id'] ?? null,
-        'departments' => $user['departments'],
-        'departmentIds' => $user['department_ids'],
-        'formClass' => $user['form_class'] ?? null,
-        'startYear' => $user['start_year'] ?? null,
-        'endYear' => $user['end_year'] ?? null,
-        'studentStatus' => $user['student_status'] ?? null
-    ]
-]);
+    echo json_encode([
+        'status' => 'success',
+        'user' => [
+            'id' => $user['id'],
+            'role' => $user['role'],
+            'avatar' => $user['avatar'] ?? '/media/avatars/blank.png',
+            'firstName' => $user['first_name'],
+            'lastName' => $user['last_name'],
+            'fullName' => $user['full_name'],
+            'email' => $user['email'],
+            'phone' => $user['phone'] ?? null,
+            'username' => $user['username'] ?? null,
+            'dob' => $user['dob'] ?? null,
+            'address1' => $user['address1'] ?? null,
+            'address2' => $user['address2'] ?? null,
+            'city' => $user['city'] ?? null,
+            'country' => $user['country'] ?? null,
+            'timeZone' => $user['time_zone'] ?? null,
+            'onSite' => (bool)$user['on_site'],
+            'house' => $user['house'] ?? null,
+            'createdAt' => $user['created_at'],
+            'updatedAt' => $user['updated_at'],
+            'position' => $user['position'] ?? null,
+            'positionId' => $user['position_id'] ?? null,
+            'departments' => $user['departments'],
+            'departmentIds' => $user['department_ids'],
+            'schools' => $user['schools'] ?? [], 
+            'schoolIds' => $user['school_ids'] ?? [], 
+            'formClass' => $user['form_class'] ?? null,
+            'startYear' => $user['start_year'] ?? null,
+            'endYear' => $user['end_year'] ?? null,
+            'studentStatus' => $user['student_status'] ?? null
+        ]
+    ]);
 } catch (\Firebase\JWT\ExpiredException $e) {
     http_response_code(401);
     echo json_encode(['status' => 'error', 'message' => 'Token expired']);
