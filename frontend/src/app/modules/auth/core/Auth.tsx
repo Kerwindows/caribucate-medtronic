@@ -65,7 +65,7 @@ const AuthInit: FC<WithChildren> = ({ children }) => {
         axios.defaults.headers.common['Authorization'] = `Bearer ${auth.api_token}`;
         try {
           const { data } = await getUserByToken(auth.api_token);
-          console.log('Raw API response:', data); // Check if schools exist here
+          
           setCurrentUser(data.user);
 
 

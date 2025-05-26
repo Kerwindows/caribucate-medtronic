@@ -44,33 +44,35 @@ export interface UserSocialNetworksModel {
 
 // src/app/modules/auth/_models.ts
 export interface UserModel {
-  id: number
-  role: string
-  avatar: string
-  firstName: string
-  lastName: string
-  fullName: string
-  email: string
-  phone: string
-  username?: string
-  dob?: string
-  address1?: string
-  address2?: string
-  city?: string
-  country?: string
-  timeZone?: string
-  onSite?: boolean
-  createdAt: string
-  updatedAt: string
-  position?: string
-  house?: string
-  positionId?: number
-  departments: string[]
-  departmentIds: number[]
-  schools: string[]
-  schoolIds: number[]
-  formClass?: string
-  startYear?: number
-  endYear?: number
-  studentStatus?: string
+  id: number;
+  role: string;
+  avatar: string;
+  firstName: string;
+  lastName: string;
+  fullName: string;
+  email: string;
+  phone?: string;
+  username?: string;
+  dob?: string;
+  address1?: string;
+  address2?: string;
+  city?: string;
+  country?: string;
+  timeZone?: string;
+  onSite: boolean;
+  house?: string;
+  createdAt: string;
+  updatedAt: string;
+  position?: string;
+  positionId?: number;
+  departments: string[];
+  departmentIds: number[];
+  schools: string[];
+  schoolIds: number[];
+  formClass?: string;
+  startYear?: number;
+  endYear?: number;
+  studentStatus?: string;
+  status?: 'active' | 'inactive' | 'pending';
+  lastLogin?: string;
 }

@@ -8,7 +8,6 @@ import {useAuth} from '../auth'
 const ProfileHeader: React.FC = () => {
   const location = useLocation()
   const {currentUser} = useAuth()
-console.log(currentUser)
   return (
     <div className='card mb-5 mb-xl-10'>
       <div className='card-body pt-9 pb-0'>
