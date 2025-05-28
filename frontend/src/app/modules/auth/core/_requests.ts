@@ -7,7 +7,7 @@ export const LOGIN_URL = `${API_URL}/login`;
 export const VERIFY_TOKEN_URL = `${API_URL}/verify_token`;
 export const REGISTER_URL = `${API_URL}/register`;
 export const REQUEST_PASSWORD_URL = `${API_URL}/forgot_password`;
-export const USERS_URL = `${API_URL}/users.php`; // Add this line
+export const USERS_URL = `${API_URL}/users.php`;
 
 export function getUsers() {
   return axios.get<{

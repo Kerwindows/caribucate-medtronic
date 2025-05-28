@@ -6,6 +6,7 @@ import {Campaigns} from './components/Campaigns'
 import {Documents} from './components/Documents'
 import {Connections} from './components/Connections'
 import {ProfileHeader} from './ProfileHeader'
+import {StaffMembersPage} from '../users/StaffMembersPage';
 
 const profileBreadCrumbs: Array<PageLink> = [
   {
@@ -65,6 +66,15 @@ const ProfilePage = () => (
           <>
             <PageTitle breadcrumbs={profileBreadCrumbs}>Documents</PageTitle>
             <Documents />
+          </>
+        }
+      />
+       <Route
+        path='staff'
+        element={
+          <>
+            <PageTitle breadcrumbs={profileBreadCrumbs}>Staff</PageTitle>
+            <StaffMembersPage />
           </>
         }
       />
