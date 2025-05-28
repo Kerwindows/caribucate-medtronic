@@ -10,6 +10,7 @@ import BuilderPageWrapper from '../pages/layout-builder/BuilderPageWrapper'
 
 const PrivateRoutes = () => {
   const ProfilePage = lazy(() => import('../modules/profile/ProfilePage'))
+  const StaffPages = lazy(() => import('../modules/users/StaffPages'))
   const WizardsPage = lazy(() => import('../modules/wizards/WizardsPage'))
   const AccountPage = lazy(() => import('../modules/accounts/AccountPage'))
   const WidgetsPage = lazy(() => import('../modules/widgets/WidgetsPage'))
@@ -31,6 +32,14 @@ const PrivateRoutes = () => {
           element={
             <SuspensedView>
               <ProfilePage />
+            </SuspensedView>
+          }
+        />
+        <Route
+          path='people/staff/*'
+          element={
+            <SuspensedView>
+              <StaffPages />
             </SuspensedView>
           }
         />
