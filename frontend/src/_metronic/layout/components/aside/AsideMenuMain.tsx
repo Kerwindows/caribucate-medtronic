@@ -103,11 +103,8 @@ export function AsideMenuMain() {
         <AsideMenuItem to='/people/staff/view' title='View Staff' hasBullet={true} />
         <AsideMenuItem to='/people/staff/history' title='Staff History' hasBullet={true} />
         <AsideMenuItem to='/people/staff/hr' title='Human Resources' hasBullet={true} />
-        <AsideMenuItem to='/people/staff/add' title='Add Staff' hasBullet={true} />
-        <AsideMenuItem to='/people/staff/edit' title='Edit Staff' hasBullet={true} />
-        <AsideMenuItem to='/people/staff/teacher-attendance' title='Teacher Attendance' hasBullet={true} />
-        <AsideMenuItem to='/people/staff/auxiliary-attendance' title='Auxiliary Attendance' hasBullet={true} />
-        <AsideMenuItem to='/people/staff/roles' title='Roles & Permissions' hasBullet={true} />
+        <AsideMenuItem to='/people/staff/attendance' title='Staff Attendance' hasBullet={true} />
+        <AsideMenuItem to='/people/staff/roles-permissions' title='Roles & Permissions' hasBullet={true} />
       </AsideMenuItemWithSub>
 
       <AsideMenuItemWithSub

@@ -7,7 +7,7 @@ import { getUserByToken, login } from "../core/_requests";
 import { toAbsoluteUrl } from "../../../../_metronic/helpers";
 import { useAuth } from "../core/Auth";
 
-// validation schema\ nconst loginSchema = Yup.object().shape({
+// validation schema
 const loginSchema = Yup.object().shape({
   email: Yup.string()
     .email("Wrong email format")
@@ -20,10 +20,10 @@ const loginSchema = Yup.object().shape({
     .required("Password is required"),
 });
 
-// initial form values
+// initial form values - removed static login
 const initialValues = {
-  email: "admin@demo.com",
-  password: "demo",
+  email: "",
+  password: "",
 };
 
 export function Login() {
@@ -40,14 +40,11 @@ export function Login() {
       try {
         // 1) Authenticate user and get JWT
         const { data: auth } = await login(values.email, values.password);
-
         // 2) Save token into context/localStorage and axios header
         saveAuth(auth);
-
         // 3) Verify token and load user profile
         const { data: userRes } = await getUserByToken(auth.api_token);
         setCurrentUser(userRes.user);
-
         // 4) Redirect to dashboard
         navigate("/dashboard", { replace: true });
       } catch (error) {
@@ -72,11 +69,11 @@ export function Login() {
       <div className="text-center mb-11">
         <h1 className="text-gray-900 fw-bolder mb-3">Sign In</h1>
         <div className="text-gray-500 fw-semibold fs-6">
-          Your Social Campaigns
+          School Management System
         </div>
       </div>
 
-      {/* Social login options (unchanged) */}
+      {/* Social login options */}
       <div className="row g-3 mb-9">
         {/* Google */}
         <div className="col-md-6">
@@ -120,17 +117,10 @@ export function Login() {
         </span>
       </div>
 
-      {/* Status message or default hint */}
-      {formik.status ? (
+      {/* Status message */}
+      {formik.status && (
         <div className="mb-lg-15 alert alert-danger">
           <div className="alert-text font-weight-bold">{formik.status}</div>
-        </div>
-      ) : (
-        <div className="mb-10 bg-light-info p-8 rounded">
-          <div className="text-info">
-            Use account <strong>admin@demo.com</strong> and password{" "}
-            <strong>demo</strong> to continue.
-          </div>
         </div>
       )}
 
@@ -146,7 +136,7 @@ export function Login() {
           className={clsx(
             "form-control bg-transparent",
             { "is-invalid": formik.touched.email && formik.errors.email },
-            { "is-valid": formik.touched.email && !formik.errors.email }
+            { "is-valid": formik.touched.email && !formik.errors.email && formik.values.email }
           )}
         />
         {formik.touched.email && formik.errors.email && (
@@ -164,12 +154,13 @@ export function Login() {
         <input
           type="password"
           name="password"
+          placeholder="Password"
           autoComplete="off"
           {...formik.getFieldProps("password")}
           className={clsx(
             "form-control bg-transparent",
             { "is-invalid": formik.touched.password && formik.errors.password },
-            { "is-valid": formik.touched.password && !formik.errors.password }
+            { "is-valid": formik.touched.password && !formik.errors.password && formik.values.password }
           )}
         />
         {formik.touched.password && formik.errors.password && (

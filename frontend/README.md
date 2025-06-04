@@ -28,14 +28,76 @@ If you are developing a production application, we recommend updating the config
 
 
 
--frontend
-Modify directory home for 
+-frontend notes
+
+For production modify directory home for 
 backend\api\.htaccess
+backend\.env
 frontend\.env
 
--backend
+-backend notes
 composer dump-autoload
 
+
+-Notes on adding new pages.
+
+--frontend\src\app\routing\AppRoutes.tsx
+This page is the main routing controller. Primary Function
+It acts as a "traffic director" that determines which parts of your app users can access based on whether they're logged in or not.
+Wraps everything in the main <App /> component
+Delegates private route handling to a separate <PrivateRoutes /> component
+Uses React Router's conditional rendering based on authentication state
+
+--frontend\src\app\routing\PrivateRoutes.tsx
+This page defines the protected/authenticated routes 
+It handles all the routes that only logged-in users can access, wrapped within the main application layout.
+Key Features
+1. Layout Wrapper
+
+All routes are wrapped in <MasterLayout /> - this provides the main app structure (header, sidebar, footer, etc.)
+
+2. Route Definitions
+Direct Routes (immediately loaded):
+
+/dashboard → Main dashboard page
+/builder → Layout builder tool
+/menu-test → Menu testing page
+
+Lazy-Loaded Routes (loaded on-demand for performance)
+
+
+3. Performance Optimization
+
+Uses lazy loading (React.lazy()) to split code into chunks
+Pages only load when user navigates to them
+Reduces initial bundle size and improves app startup time
+
+4. Loading States
+
+SuspensedView component shows a progress bar while lazy components load
+Uses TopBarProgress for visual feedback during navigation
+
+5. Redirect Logic
+
+/auth/* → Redirects to dashboard (authenticated users shouldn't see login pages)
+* (404) → Redirects to error page for invalid routes
+
+This is essentially the "main application" that users see after logging in, with all the core school management features.
+
+
+
+-e.g. 
+frontend\src\app\modules\users\StaffPages.tsx
+
+pages to consider
+-frontend\src\_metronic\layout\components\aside\AsideMenuMain.tsx
+-frontend\src\app\modules\profile\SchoolHeader.tsx
+
+
+
+
+
+--Directory Structure
 ------------------------------------------------------------
 
 frontend/src/app/modules/

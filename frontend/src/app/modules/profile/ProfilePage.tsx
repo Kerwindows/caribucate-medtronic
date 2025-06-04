@@ -6,7 +6,7 @@ import {Campaigns} from './components/Campaigns'
 import {Documents} from './components/Documents'
 import {Connections} from './components/Connections'
 import {ProfileHeader} from './ProfileHeader'
-import {StaffMembersPage} from '../users/StaffMembersPage';
+import {StaffMembersPage} from '../users/staff/StaffMembersPage';
 
 const profileBreadCrumbs: Array<PageLink> = [
   {

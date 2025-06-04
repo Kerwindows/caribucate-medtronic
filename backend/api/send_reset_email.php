@@ -1,10 +1,12 @@
 <?php
 
 require_once __DIR__ . '/../vendor/autoload.php';
-require_once __DIR__ . '/../Config/cors.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+
+// 4) Emit CORS headers (and exit on OPTIONS)
+require_once __DIR__ . '/cors.php';
 
 header('Content-Type: application/json');
 
@@ -48,8 +50,11 @@ try {
     $stmt = $pdo->prepare("INSERT INTO password_resets (email, token, expires_at) VALUES (?, ?, ?)");
     $stmt->execute([$email, $token, $expires_at]);
 
-    // Build reset URL
-    $resetUrl = "http://localhost:5173/reset-password?token=$token";
+   
+    // Build reset URL dynamically
+    $frontendBaseUrl = rtrim($_ENV['FRONTEND_BASE_URL'], '/');
+    $resetPath = '/auth/reset-password'; // Frontend route path
+    $resetUrl = "{$frontendBaseUrl}{$resetPath}?token=$token";
 
     // Send email via PHPMailer
     $mail = new PHPMailer(true);

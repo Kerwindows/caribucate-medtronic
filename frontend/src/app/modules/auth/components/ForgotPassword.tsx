@@ -3,10 +3,10 @@ import * as Yup from 'yup'
 import clsx from 'clsx'
 import {Link} from 'react-router-dom'
 import {useFormik} from 'formik'
-import {requestPassword} from '../core/_requests'
+import {requestPasswordReset} from '../core/_requests'
 
 const initialValues = {
-  email: 'admin@demo.com',
+  email: '',
 }
 
 const forgotPasswordSchema = Yup.object().shape({
@@ -23,22 +23,20 @@ export function ForgotPassword() {
   const formik = useFormik({
     initialValues,
     validationSchema: forgotPasswordSchema,
-    onSubmit: (values, {setStatus, setSubmitting}) => {
+    onSubmit: async (values, {setStatus, setSubmitting}) => {
       setLoading(true)
       setHasErrors(undefined)
-      setTimeout(() => {
-        requestPassword(values.email)
-          .then(() => {
-            setHasErrors(false)
-            setLoading(false)
-          })
-          .catch(() => {
-            setHasErrors(true)
-            setLoading(false)
-            setSubmitting(false)
-            setStatus('The login detail is incorrect')
-          })
-      }, 1000)
+      
+      try {
+        await requestPasswordReset(values.email)
+        setHasErrors(false)
+      } catch (error) {
+        setHasErrors(true)
+        setStatus('Failed to send reset email. Please try again.')
+      } finally {
+        setLoading(false)
+        setSubmitting(false)
+      }
     },
   })
 
@@ -50,34 +48,28 @@ export function ForgotPassword() {
       onSubmit={formik.handleSubmit}
     >
       <div className='text-center mb-10'>
-        {/* begin::Title */}
         <h1 className='text-gray-900 fw-bolder mb-3'>Forgot Password ?</h1>
-        {/* end::Title */}
-
-        {/* begin::Link */}
         <div className='text-gray-500 fw-semibold fs-6'>
           Enter your email to reset your password.
         </div>
-        {/* end::Link */}
       </div>
 
-      {/* begin::Title */}
       {hasErrors === true && (
         <div className='mb-lg-15 alert alert-danger'>
           <div className='alert-text font-weight-bold'>
-            Sorry, looks like there are some errors detected, please try again.
+            {formik.status || 'Sorry, looks like there are some errors detected, please try again.'}
           </div>
         </div>
       )}
 
       {hasErrors === false && (
         <div className='mb-10 bg-light-info p-8 rounded'>
-          <div className='text-info'>Sent password reset. Please check your email</div>
+          <div className='text-info'>
+            Password reset email sent. Please check your inbox (and spam folder).
+          </div>
         </div>
       )}
-      {/* end::Title */}
 
-      {/* begin::Form group */}
       <div className='fv-row mb-8'>
         <label className='form-label fw-bolder text-gray-900 fs-6'>Email</label>
         <input
@@ -88,9 +80,7 @@ export function ForgotPassword() {
           className={clsx(
             'form-control bg-transparent',
             {'is-invalid': formik.touched.email && formik.errors.email},
-            {
-              'is-valid': formik.touched.email && !formik.errors.email,
-            }
+            {'is-valid': formik.touched.email && !formik.errors.email}
           )}
         />
         {formik.touched.email && formik.errors.email && (
@@ -101,11 +91,14 @@ export function ForgotPassword() {
           </div>
         )}
       </div>
-      {/* end::Form group */}
 
-      {/* begin::Form group */}
       <div className='d-flex flex-wrap justify-content-center pb-lg-0'>
-        <button type='submit' id='kt_password_reset_submit' className='btn btn-primary me-4'>
+        <button 
+          type='submit' 
+          id='kt_password_reset_submit' 
+          className='btn btn-primary me-4'
+          disabled={formik.isSubmitting || !formik.isValid}
+        >
           <span className='indicator-label'>Submit</span>
           {loading && (
             <span className='indicator-progress'>
@@ -119,13 +112,12 @@ export function ForgotPassword() {
             type='button'
             id='kt_login_password_reset_form_cancel_button'
             className='btn btn-light'
-            disabled={formik.isSubmitting || !formik.isValid}
+            disabled={formik.isSubmitting}
           >
             Cancel
           </button>
-        </Link>{' '}
+        </Link>
       </div>
-      {/* end::Form group */}
     </form>
   )
 }

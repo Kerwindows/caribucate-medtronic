@@ -5,38 +5,38 @@ import {Dropdown1, Search} from '../../../../partials'
 const projects: ReadonlyArray<{image: string; title: string; link: string}> = [
   {
     image: 'media/svg/brand-logos/bebo.svg',
-    title: 'Briviba SaaS',
-    link: 'By James',
+    title: 'Announcements',
+    link: 'School Notices',
   },
   {
     image: 'media/svg/brand-logos/vimeo.svg',
-    title: 'Vine Quick Reports',
-    link: 'By Andres',
+    title: 'Calendar',
+    link: 'View Upcoming Events',
   },
   {
     image: 'media/svg/brand-logos/kickstarter.svg',
-    title: 'KC Account CRM',
-    link: 'By Keenthemes',
+    title: 'Content Generator',
+    link: 'Create content for your students',
   },
   {
     image: 'media/svg/brand-logos/balloon.svg',
-    title: 'Baloon SaaS',
-    link: 'By SIA Team',
+    title: 'Lesson Assistant',
+    link: 'Create a Lesson Plan',
   },
   {
     image: 'media/svg/brand-logos/infography.svg',
-    title: 'Most Cloudy UMC',
-    link: 'By Andrei',
+    title: 'Assessment Creator',
+    link: 'Create Summative Assessments',
   },
   {
     image: 'media/svg/brand-logos/disqus.svg',
-    title: 'Disqus Forum',
-    link: 'By Disqus Inc.',
+    title: 'Sketch Pad',
+    link: 'Create your own enquiry',
   },
   {
     image: 'media/svg/brand-logos/plurk.svg',
-    title: 'Proove Quick CRM',
-    link: 'By Proove Limited',
+    title: 'Chat',
+    link: 'Chat with Collegues',
   },
 ]
 
@@ -68,7 +68,7 @@ const ProjectsTab = () => {
       {/*begin::Projects*/}
       <div className='m-0'>
         {/*begin::Heading*/}
-        <h1 className='text-gray-800 fw-bold mb-6 mx-5'>Projects</h1>
+        <h1 className='text-gray-800 fw-bold mb-6 mx-5'>Applications</h1>
         {/*end::Heading*/}
 
         {/*begin::Items*/}
